@@ -151,7 +151,7 @@ Public Class IPAddress
       ' Locate first difference
       Dim IPXOr As New IPAddress(CalcIP(Not (Numeric Xor IPInput.Numeric)), 0)
       ' Set new mask
-      _mask = CUInt(InStr(IPXOr.ToBinary, "0") - 1)
+      _mask = CUInt(IPXOr.ToBinary.IndexOf("0") - 1)
       ' Calculate new IP
       _ip = CalcIP(NetMask And Numeric And IPInput.Numeric)
     End If
