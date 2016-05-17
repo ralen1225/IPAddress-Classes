@@ -134,11 +134,13 @@ Public Class IPAddress
       If strOctets.Length <> 4 Then Return False
       ' Check each octet
       For Each strOctet In strOctets
-        ' Check length
-        If strOctet.Length < 1 Or strOctet.Length > 3 Then Return False
-        ' Check value
+        ' Check length - 0-length strings will not convert to UInt
+        If strOctet.Length < 1 Then Return False
+        ' Check value - guaranteed to be digits only at this point
         If CUInt(strOctet) > 255 Then Return False
       Next
+      ' Netmask out of range
+      If _mask > 32 Then Return False
       ' Passed all tests
       Return True
     End Get
@@ -164,7 +166,7 @@ Public Class IPAddress
     ' Generate 4 octets
     For i = 0 To 3
       ' After the first one, add a dot
-      If i <> 0 Then strIPAddr += "."
+      If i > 0 Then strIPAddr += "."
       ' Isolate current octet
       strIPAddr += ((IPNumber >> ((3 - i) * 8)) And &HFFUI).ToString
     Next
