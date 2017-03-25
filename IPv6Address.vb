@@ -1,4 +1,4 @@
-' Module:   IPv6 Address Class
+﻿' Module:   IPv6 Address Class
 ' Author:   James Merrill
 
 Option Explicit On
@@ -215,6 +215,8 @@ Public Class IPv6Address
   Public Shared Function Valid(IPAddress As String) As Boolean
     ' Valid hex characters plus colon
     Const ValidChars As String = "0123456789ABCDEF:"
+    ' Check length
+    If IPAddress.Length = 0 Then Return False
     ' Check for invalid characters
     For i = 0 To IPAddress.Length - 1
       If Not ValidChars.Contains(IPAddress.ToUpper.Substring(i, 1)) Then Return False
@@ -230,10 +232,10 @@ Public Class IPv6Address
     ' Cycle through hextets
     For i = 0 To strHex.GetUpperBound(0)
       ' If first hextet is blank and 2nd is not, return false
-      If i = 0 AndAlso strHex(i) = "" AndAlso Not strHex(i + 1) = "" Then
+      If i = 0 AndAlso strHex(i) = "" AndAlso strHex.GetUpperBound(0) > 0 AndAlso Not strHex(i + 1) = "" Then
         Return False
         ' If last hextet Is blank and previous one is not, return false
-      ElseIf i = strHex.GetUpperBound(0) AndAlso strHex(i) = "" AndAlso Not strHex(i - 1) = "" Then
+      ElseIf i = strHex.GetUpperBound(0) AndAlso i > 0 AndAlso strHex(i) = "" AndAlso Not strHex(i - 1) = "" Then
         Return False
         ' If current hextet is blank and a blank has been found and i is not 1 or upper bound,
         ' return false
@@ -291,7 +293,7 @@ Public Class IPv6Address
     If Hextets.Length <= 8 Then
       Dim intSplit As Integer = -1
       If Hextets(0) = "" Then Remove(Hextets, 0)
-      If Hextets(Hextets.GetUpperBound(0)) = "" Then Remove(Hextets, Hextets.GetUpperBound(0))
+      If Hextets.Length > 1 AndAlso Hextets(Hextets.GetUpperBound(0)) = "" Then Remove(Hextets, Hextets.GetUpperBound(0))
       For i = 0 To Hextets.GetUpperBound(0)
         If Hextets(i) = "" Then
           If intSplit = -1 Then

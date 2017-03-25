@@ -1,4 +1,4 @@
-Option Explicit On
+﻿Option Explicit On
 Option Strict On
 
 Public Class IPAddress
@@ -169,6 +169,8 @@ Public Class IPAddress
   Public Shared Function Valid(IPAddress As String) As Boolean
     ' Valid character list
     Dim strValidChars As String = "0123456789."
+    ' Check length
+    If IPAddress.Length = 0 Then Return False
     ' Check each character
     For i = 0 To IPAddress.Length - 1
       If Not strValidChars.Contains(IPAddress.Substring(i, 1)) Then Return False
